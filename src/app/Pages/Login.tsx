@@ -2,21 +2,25 @@ import { useState } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addUser } from "../Redux/UserSlice";
+import { BASE_URL } from "@/utils/Constants";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("shubham@gmail.com");
+  const [password, setPassword] = useState("Shubham@123");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: any, value: any) => {
     try {
       e.preventDefault();
 
-      const res = await axios.post("http://localhost:7777/login", value, {
+      const res = await axios.post(`${BASE_URL}/login`, value, {
         withCredentials: true,
       });
 
       dispatch(addUser(res?.data?.data));
+      navigate("/feed");
     } catch (error) {
       console.log(error);
     }
@@ -50,6 +54,7 @@ export default function Login() {
                     id="email"
                     name="email"
                     type="email"
+                    value={email}
                     required
                     autoComplete="email"
                     onChange={(e) => setEmail(e.target.value)}
@@ -69,6 +74,7 @@ export default function Login() {
                   <input
                     id="password"
                     name="password"
+                    value={password}
                     type="text"
                     required
                     autoComplete="current-password"
